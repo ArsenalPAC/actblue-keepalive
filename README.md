@@ -8,6 +8,16 @@ Chrome (Manifest V3).
 > published by Arsenal PAC. Provided as is; use at your own risk. See
 > [DISCLAIMER.md](DISCLAIMER.md).
 
+<p align="center">
+  <a href="https://github.com/ArsenalPAC/actblue-keepalive/raw/main/dist/actblue-keepalive.zip">
+    <img src="https://img.shields.io/badge/Download-Chrome%20%26%20Edge-1f6feb?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download the extension for Chrome and Edge" />
+  </a>
+  &nbsp;
+  <a href="#install">
+    <img src="https://img.shields.io/badge/How%20to%20install-2e7d32?style=for-the-badge" alt="How to install" />
+  </a>
+</p>
+
 ## What it does
 
 ActBlue signs you out after a period of inactivity. While it is on, this extension
@@ -31,26 +41,32 @@ token. There is no account, no server, and no tracking. See [PRIVACY.md](PRIVACY
 
 ## Install
 
-### From a release (simplest)
+Browsers do not allow one-click install for extensions outside their stores, so
+installing is two quick steps: download the package, then load it.
 
-1. Download the latest `actblue-keepalive-vX.Y.Z.zip` from the
-   [Releases](../../releases) page.
-2. Verify it (recommended). Each release ships a `.zip.sha256` checksum. Compare
-   it against your download, for example `sha256sum -c actblue-keepalive-vX.Y.Z.zip.sha256`
-   (or `Get-FileHash` on Windows), then unzip.
-3. Open `edge://extensions` (Edge) or `chrome://extensions` (Chrome).
-4. Turn on **Developer mode**.
-5. Click **Load unpacked** and select the unzipped folder (the one containing
+### 1. Download
+
+Use the **Download** button above, or grab
+[`dist/actblue-keepalive.zip`](dist/actblue-keepalive.zip) directly from this repo.
+
+Optional but recommended: verify the download against
+[`dist/actblue-keepalive.zip.sha256`](dist/actblue-keepalive.zip.sha256), for
+example `sha256sum -c actblue-keepalive.zip.sha256` (or `Get-FileHash` on Windows).
+
+### 2. Load it
+
+1. Unzip the download.
+2. Open `edge://extensions` (Edge) or `chrome://extensions` (Chrome).
+3. Turn on **Developer mode**.
+4. Click **Load unpacked** and select the unzipped folder (the one containing
    `manifest.json`).
-6. Pin the extension, then sign in to ActBlue as usual.
+5. Pin the extension, then sign in to ActBlue as usual.
 
-### From source
+### Build from source instead
 
-1. Download or clone this repository.
-2. Follow steps 3 to 6 above, selecting the `src/` folder.
-
-There is no build step; the extension is plain JavaScript, HTML, and CSS, so what
-you load is exactly what you can read in `src/`.
+Clone the repo and **Load unpacked** the `src/` folder directly. There is no build
+step; the extension is plain JavaScript, HTML, and CSS, so what you load is exactly
+what you can read in `src/`. To rebuild the package, run `sh scripts/package.sh`.
 
 ## Using it
 

@@ -1,12 +1,16 @@
-# Packaged builds (produced by CI / release tooling, never committed)
+# Build artifacts are ignored by default...
 *.zip
 *.crx
 *.pem
 *.sha256
 
-# Dependencies / build output (none today; kept for future-proofing)
+# ...except the shipped package, which is committed on purpose so it can be
+# downloaded straight from the repo.
+!dist/actblue-keepalive.zip
+!dist/actblue-keepalive.zip.sha256
+
+# Dependencies / build output
 node_modules/
-dist/
 
 # Local editor / OS cruft
 .DS_Store

@@ -1,9 +1,8 @@
 name: Release
 
-# Packages the unpacked extension into a verifiable zip when a version tag is
-# pushed (for example v0.1.0), and attaches it plus a SHA-256 checksum to the
-# GitHub Release. manifest.json lands at the zip root so the artifact loads
-# unpacked and uploads to the Edge Add-ons / Chrome Web Store dashboards as-is.
+# On a version tag (for example v0.1.0), rebuild the package and attach the zip
+# plus its SHA-256 to a GitHub Release. The zip carries manifest.json at the root
+# so it loads unpacked and uploads to the Edge Add-ons / Chrome Web Store as-is.
 
 on:
   push:
@@ -32,17 +31,13 @@ jobs:
             exit 1
           fi
 
-      - name: Package (manifest.json at zip root)
-        run: |
-          cd src
-          zip -r "../actblue-keepalive-v${{ steps.ver.outputs.version }}.zip" . -x '*.DS_Store'
-          cd ..
-          sha256sum "actblue-keepalive-v${{ steps.ver.outputs.version }}.zip" > "actblue-keepalive-v${{ steps.ver.outputs.version }}.zip.sha256"
+      - name: Package
+        run: sh scripts/package.sh
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            actblue-keepalive-v${{ steps.ver.outputs.version }}.zip
-            actblue-keepalive-v${{ steps.ver.outputs.version }}.zip.sha256
+            dist/actblue-keepalive.zip
+            dist/actblue-keepalive.zip.sha256
           generate_release_notes: true
