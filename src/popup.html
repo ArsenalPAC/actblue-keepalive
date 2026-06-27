@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ActBlue Session Keepalive</title>
+  <style>
+    :root {
+      --ink: #1b1f24;
+      --muted: #5b6570;
+      --line: #e7e9ec;
+      --surface: #ffffff;
+      --surface-2: #f6f8fa;
+      --accent: #1f6feb;
+      --alive: #2e7d32;
+      --ended: #b26a00;
+      --neutral: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font: 14px/1.45 "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      margin: 0;
+      width: 312px;
+    }
+
+    header {
+      padding: 13px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .brand { font-size: 13px; font-weight: 700; letter-spacing: .01em; }
+    .tagline { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    .switch { position: relative; display: inline-block; width: 40px; height: 23px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider-toggle { position: absolute; cursor: pointer; inset: 0; background: #cfd4da; border-radius: 999px; transition: background .15s; }
+    .slider-toggle::before { content: ""; position: absolute; height: 17px; width: 17px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+    .switch input:checked + .slider-toggle { background: var(--accent); }
+    .switch input:checked + .slider-toggle::before { transform: translateX(17px); }
+    .switch input:focus-visible + .slider-toggle { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .status { padding: 14px 16px 12px; display: flex; align-items: flex-start; gap: 10px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--neutral); margin-top: 4px; flex: none; }
+    .dot.alive { background: var(--alive); }
+    .dot.ended { background: var(--ended); }
+    .dot.paused, .dot.offline, .dot.disabled, .dot.unknown { background: var(--neutral); }
+    .state { font-size: 15.5px; font-weight: 600; }
+    .message { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+
+    .meta { padding: 0 16px 12px; color: var(--muted); font-size: 12.5px; }
+    .row { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+
+    .controls { padding: 13px 16px; border-top: 1px solid var(--line); background: var(--surface-2); }
+    .ctl-head { display: flex; justify-content: space-between; align-items: baseline; }
+    .ctl-head label { font-size: 13px; font-weight: 600; }
+    .value { font-weight: 700; color: var(--accent); font-size: 14px; }
+    input[type="range"] { width: 100%; margin: 11px 0 3px; accent-color: var(--accent); cursor: pointer; }
+    .ticks { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; }
+    .ticks span { width: 1px; text-align: center; overflow: visible; white-space: nowrap; }
+
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-size: 12.5px; color: var(--accent); font-weight: 600; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "\25B8 "; }
+    details[open] summary::before { content: "\25BE "; }
+    .ctl-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 10px 0 2px; }
+    .ctl-row label { font-size: 13px; font-weight: 600; }
+    input[type="number"] { font: inherit; font-size: 13px; width: 66px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+    input[type="url"] { font: inherit; font-size: 12.5px; width: 100%; padding: 6px 8px; margin-top: 6px; border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+    .hint { color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+
+    .actions { display: flex; gap: 8px; padding: 12px 16px; }
+    button.act { font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; flex: 1; border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 8px; padding: 8px 10px; }
+    button.act:hover { background: #1a60d0; }
+    button.act.ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+    button.act.ghost:hover { background: var(--surface-2); }
+
+    footer { padding: 10px 16px 13px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
+    footer .links { margin-top: 5px; display: flex; gap: 12px; flex-wrap: wrap; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .saved { display: block; color: var(--alive); font-size: 11.5px; opacity: 0; transition: opacity .15s; margin-top: 8px; }
+    .saved.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand">ActBlue Keepalive</div>
+      <div class="tagline">Keeps your session from idling out</div>
+    </div>
+    <label class="switch" title="Turn keepalive on or off">
+      <input type="checkbox" id="enabled" />
+      <span class="slider-toggle"></span>
+    </label>
+  </header>
+
+  <div class="status">
+    <span id="dot" class="dot unknown"></span>
+    <div>
+      <div id="state" class="state">Checking...</div>
+      <div id="message" class="message"></div>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div class="row"><span>Last check</span><span id="lastCheck">-</span></div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl-head">
+      <label for="duration">Keep my session alive for</label>
+      <span id="durationValue" class="value">3 hours</span>
+    </div>
+    <input type="range" id="duration" min="0" max="8" step="1" list="durationTicks" />
+    <datalist id="durationTicks">
+      <option value="0"></option><option value="1"></option><option value="2"></option>
+      <option value="3"></option><option value="4"></option><option value="5"></option>
+      <option value="6"></option><option value="7"></option><option value="8"></option>
+    </datalist>
+    <div class="ticks">
+      <span>30m</span><span>1h</span><span>2h</span><span>3h</span><span>4h</span><span>6h</span><span>8h</span><span>12h</span><span>&infin;</span>
+    </div>
+
+    <details>
+      <summary>Advanced</summary>
+      <div class="ctl-row">
+        <label for="intervalMinutes">Check every (minutes)</label>
+        <input type="number" id="intervalMinutes" min="1" max="60" step="1" />
+      </div>
+      <div class="hint">How often it pings while the window is open. Minimum 1 minute.</div>
+      <label for="keepaliveUrl" class="hint" style="display:block;margin-top:9px;">Keepalive URL (stays on secure.actblue.com)</label>
+      <input type="url" id="keepaliveUrl" />
+      <button id="save" class="act ghost" style="width:100%;margin-top:10px;">Save advanced settings</button>
+    </details>
+    <span id="saved" class="saved">Saved</span>
+  </div>
+
+  <div class="actions">
+    <button id="checkNow" class="act">Check now</button>
+  </div>
+
+  <footer>
+    Unofficial. Not affiliated with ActBlue. It uses your existing ActBlue login and never sees your password or session token.
+    <div class="links">
+      <a id="openActBlue" href="https://secure.actblue.com/my-dashboards" target="_blank" rel="noreferrer noopener">Open ActBlue</a>
+      <a id="aboutLink" href="#">About</a>
+    </div>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

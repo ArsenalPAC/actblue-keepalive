@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About: ActBlue Session Keepalive</title>
+  <style>
+    :root { --ink:#1b1f24; --muted:#5b6570; --line:#e7e9ec; --accent:#1f6feb; --surface:#fff; --surface-2:#f6f8fa; }
+    * { box-sizing: border-box; }
+    body { font: 15px/1.55 "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--surface-2); margin: 0; }
+    main { max-width: 680px; margin: 0 auto; padding: 32px 22px 56px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    h2 { font-size: 16px; margin: 0 0 8px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .badge { display: inline-block; background: #eef2f7; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; margin: 0 0 18px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 14px 0; }
+    p { margin: 8px 0; }
+    ul { margin: 8px 0; padding-left: 20px; }
+    li { margin: 5px 0; }
+    code { background: #eef1f4; padding: 1px 5px; border-radius: 5px; font-size: 13px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .muted { color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>ActBlue Session Keepalive</h1>
+    <p class="sub">A small, open-source tool that keeps an active ActBlue session from idling out.</p>
+    <span class="badge">Unofficial &middot; not affiliated with ActBlue</span>
+
+    <div class="card">
+      <h2>What it does</h2>
+      <p>While turned on, it sends one ordinary signed-in request to <code>secure.actblue.com</code> every few
+      minutes so your session does not go idle. It uses the login your browser already has.</p>
+      <p>You choose how long to keep your session warm, from 30 minutes up to Unlimited (default 3 hours). After
+      that window it pauses and lets the session idle out on its own. "Check now" extends the window.</p>
+    </div>
+
+    <div class="card">
+      <h2>Your privacy</h2>
+      <ul>
+        <li>No password and no session token is ever read, stored, or sent. Your browser holds your login.</li>
+        <li>No analytics, no telemetry, no tracking, no server. The only request it makes is to ActBlue.</li>
+        <li>Your settings and last status are kept in local browser storage and do not sync anywhere.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Good to know</h2>
+      <ul>
+        <li>Keeping a session open longer is convenient, so use it on a device you control. Lock your screen when
+        you step away, and sign out when you are done.</li>
+        <li>It is a load-unpacked extension, so the code you load is what runs. The source is open; you can read it.</li>
+        <li>Provided as is, with no warranty. ActBlue can change its site at any time, which may stop this from
+        working. Use it at your own discretion.</li>
+      </ul>
+    </div>
+
+    <p class="muted">Open source under the Apache License 2.0.</p>
+  </main>
+</body>
+</html>

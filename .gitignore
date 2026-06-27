@@ -1,0 +1,19 @@
+# Packaged builds (produced by CI / release tooling, never committed)
+*.zip
+*.crx
+*.pem
+*.sha256
+
+# Dependencies / build output (none today; kept for future-proofing)
+node_modules/
+dist/
+
+# Local editor / OS cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local-only working notes and overrides, never part of the deliverable
+.scratch/
+*.local.md

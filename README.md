@@ -1,0 +1,106 @@
+# ActBlue Session Keepalive
+
+A small, open-source browser extension that keeps an active ActBlue dashboard
+session from idling out, so you re-login less. For Microsoft Edge and Google
+Chrome (Manifest V3).
+
+> **Unofficial tool, not affiliated with ActBlue.** Independent and open source,
+> published by Arsenal PAC. Provided as is; use at your own risk. See
+> [DISCLAIMER.md](DISCLAIMER.md).
+
+## What it does
+
+ActBlue signs you out after a period of inactivity. While it is on, this extension
+sends one small, signed-in request to `secure.actblue.com` every few minutes,
+which keeps your existing session from going idle, the same as if you had clicked
+something on the page.
+
+You choose how long to keep your session warm with a slider, from 30 minutes up to
+Unlimited (default 3 hours). After that window the keepalive pauses and lets the
+session idle out on its own; "Check now" extends it. It uses the session your
+browser already has and never sees, stores, or sends your password or session
+token. There is no account, no server, and no tracking. See [PRIVACY.md](PRIVACY.md).
+
+### What it can and can't do
+
+- It defeats an **idle** (inactivity) timeout, the usual cause of "why am I logged
+  out again?"
+- If ActBlue also enforces an **absolute** session limit (a hard cap no matter
+  what), nothing can extend past that. The extension will notice the session
+  ended, tell you once, and pick back up after you sign in again.
+
+## Install
+
+### From a release (simplest)
+
+1. Download the latest `actblue-keepalive-vX.Y.Z.zip` from the
+   [Releases](../../releases) page.
+2. Verify it (recommended). Each release ships a `.zip.sha256` checksum. Compare
+   it against your download, for example `sha256sum -c actblue-keepalive-vX.Y.Z.zip.sha256`
+   (or `Get-FileHash` on Windows), then unzip.
+3. Open `edge://extensions` (Edge) or `chrome://extensions` (Chrome).
+4. Turn on **Developer mode**.
+5. Click **Load unpacked** and select the unzipped folder (the one containing
+   `manifest.json`).
+6. Pin the extension, then sign in to ActBlue as usual.
+
+### From source
+
+1. Download or clone this repository.
+2. Follow steps 3 to 6 above, selecting the `src/` folder.
+
+There is no build step; the extension is plain JavaScript, HTML, and CSS, so what
+you load is exactly what you can read in `src/`.
+
+## Using it
+
+- **Toolbar icon:** click it for the dropdown. A calm green dot means your session
+  is alive; a muted amber `!` means it ended (sign in to resume); grey means off,
+  paused, or unreachable.
+- **On/off switch** is at the top of the dropdown.
+- **Keep my session alive for:** a slider with ticks from 30 minutes to Unlimited
+  (default 3 hours). That is how long the extension holds your session before it
+  lets it idle out.
+- **Check now** runs an immediate check and extends the window.
+- **Advanced:** the ping interval (how often it checks while the window is open,
+  minimum 1 minute) and the keepalive URL (kept on `secure.actblue.com`).
+
+## Use at your own risk
+
+This is an independent tool that interacts with a third-party website you do not
+control. Keeping a session open longer than usual is a convenience that has a
+flip side: an authenticated dashboard stays reachable for longer. Use it on a
+personal device you control, lock your screen when you step away, and sign out of
+ActBlue when you finish. It is provided as is, without warranty; ActBlue can change
+its site at any time, which may stop this from working. See [SECURITY.md](SECURITY.md).
+
+## How it works
+
+| File | Role |
+|---|---|
+| `src/manifest.json` | MV3 manifest. Permissions: `alarms`, `storage`, `notifications`. Host: `secure.actblue.com` only. |
+| `src/background.js` | Service worker. While the keep-alive window is open, an alarm fires a credentialed `GET` and classifies the result as alive, ended, paused, or unreachable. |
+| `src/popup.html`, `popup.js` | The dropdown: status, on/off, duration slider, advanced settings, Check now. |
+| `src/about.html` | In-extension about page. |
+
+See [docs/hld.md](docs/hld.md) for the architecture.
+
+## Permissions, explained
+
+- `host_permissions: https://secure.actblue.com/*`: to make the keepalive request.
+  This is the only site the extension can touch.
+- `alarms`: to run the check on a schedule.
+- `storage`: to remember your settings and last status, locally.
+- `notifications`: to tell you once if your session ended.
+
+No `<all_urls>`, no content scripts, no access to any other site.
+
+## Contributing and reporting
+
+- Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) and
+  the [Code of Conduct](CODE_OF_CONDUCT.md).
+- To report a security concern, see [SECURITY.md](SECURITY.md).
+
+## License
+
+[Apache License 2.0](LICENSE). Provided as is, without warranty of any kind.
