@@ -10,8 +10,8 @@ audience_tier: public
 
 A community-built, unofficial Manifest V3 browser extension (Edge and Chrome)
 that keeps an active ActBlue dashboard session from idling out, by sending a
-periodic credentialed request to `secure.actblue.com` while you are already
-signed in. Not affiliated with ActBlue. See [NOTICE](NOTICE) and
+periodic credentialed request to ActBlue (default `fundraising.app.actblue.com`)
+while you are already signed in. Not affiliated with ActBlue. See [NOTICE](NOTICE) and
 [DISCLAIMER.md](DISCLAIMER.md).
 
 ## What it is
@@ -37,7 +37,7 @@ session, says so, and resumes after the next sign-in.
 ```
 actblue-keepalive/
   src/                 # the unpacked extension
-    manifest.json      # MV3 manifest (permissions: alarms, storage, notifications; host: secure.actblue.com)
+    manifest.json      # MV3 manifest (permissions: alarms, storage, notifications; host: *.actblue.com)
     background.js      # service worker: keep-alive window + alarm -> GET -> classify alive/ended/paused/unreachable
     popup.html/js      # toolbar dropdown: status, on/off switch, duration slider, advanced settings, Check now
     about.html         # in-extension about page
@@ -62,8 +62,10 @@ There is no automated test harness. Manual check: load unpacked, open the popup,
 ## Conventions
 
 - Manifest V3, authored for plain Chromium so it loads in Edge or Chrome.
-- Least privilege: host access is scoped to `https://secure.actblue.com/*` only;
-  request no permission the extension does not use.
+- Least privilege: host access is scoped to `https://*.actblue.com/*` only (the
+  ActBlue subdomain family: the dashboard lives at `fundraising.app.actblue.com`,
+  with older tools on `secure.actblue.com`); request no permission the extension
+  does not use.
 - Requests stay read-only `GET`s. A `GET` needs no CSRF token and changes no
   account state. Any move to a state-changing request is a deliberate, documented
   change.
@@ -74,7 +76,8 @@ There is no automated test harness. Manual check: load unpacked, open the popup,
 
 ## Boundaries
 
-- Target `secure.actblue.com` only. Do not broaden host permissions, add another
-  site, or add a network endpoint without a deliberate decision and a doc update.
+- Target the `*.actblue.com` subdomains only. Do not broaden host permissions to
+  another site, or add a network endpoint off actblue.com, without a deliberate
+  decision and a doc update.
 - Never persist or transmit cookie values, tokens, or account data. Status is
   alive / ended / unreachable and a timestamp, never session contents.

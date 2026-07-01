@@ -65,7 +65,7 @@ popup.html / popup.js  (read status; write settings to chrome.storage.local)
 ```
 
 - `manifest.json`: MV3. Permissions `alarms`, `storage`, `notifications`; host
-  permission `https://secure.actblue.com/*` only.
+  permission `https://*.actblue.com/*` only.
 - `background.js`: owns the keep-alive window, the alarm, the ping, classification,
   badge, and the one-shot "session ended" notification. Re-arms the window and runs
   on settings changes and "Check now".
@@ -81,9 +81,10 @@ popup.html / popup.js  (read status; write settings to chrome.storage.local)
 - **Duration window, modest by default.** Rather than holding a session open
   forever, the keepalive runs for a chosen window (default 3 hours) and then lets
   the session idle out. Unlimited is opt-in.
-- **Default target `my-dashboards`.** It needs no per-user parameter and cleanly
-  redirects to login when the session is gone, which doubles as the ended-session
-  signal. The URL is configurable but pinned to `secure.actblue.com`.
+- **Default target the dashboard root.** `https://fundraising.app.actblue.com/`
+  needs no per-user parameter and cleanly redirects to login when the session is
+  gone, which doubles as the ended-session signal. The URL is configurable but
+  pinned to an `actblue.com` subdomain.
 - **One-minute interval floor.** MV3 alarms enforce a 1-minute minimum in
   production; the default cadence is 5 minutes.
 - **Self-healing.** A dead session is reported, not retried into a loop; the next

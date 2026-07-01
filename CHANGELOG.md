@@ -6,6 +6,16 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-01
+
+### Changed
+- Broadened the host permission from `https://secure.actblue.com/*` to
+  `https://*.actblue.com/*` and repointed the default keepalive URL to the current
+  dashboard at `https://fundraising.app.actblue.com/`. ActBlue moved the dashboard
+  to a new subdomain; the wildcard keeps the whole `actblue.com` subdomain family
+  reachable, and the advanced keepalive URL now accepts any `actblue.com` subdomain
+  (still HTTPS, still a read-only GET).
+
 ## [0.1.0] - 2026-06-26
 
 ### Added

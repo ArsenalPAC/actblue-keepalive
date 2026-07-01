@@ -6,7 +6,8 @@ no servers. It talks only to ActBlue, using the session your browser already has
 ## What it does
 
 While the keep-alive window you set is open (default 3 hours, up to Unlimited),
-the extension makes one ordinary web request to `secure.actblue.com` on a timer
+the extension makes one ordinary web request to your ActBlue dashboard (default
+`fundraising.app.actblue.com`) on a timer
 (default every 5 minutes) so an active session does not lapse during idle gaps.
 After that window it pauses and lets the session idle out; "Check now" starts a
 fresh window. Your browser attaches your existing ActBlue session cookie to that
@@ -41,7 +42,7 @@ This never leaves your browser. Removing the extension removes it.
 
 | Permission | Why |
 |---|---|
-| `host_permissions: https://secure.actblue.com/*` | To make the keepalive request to ActBlue. This is the only site the extension can touch. |
+| `host_permissions: https://*.actblue.com/*` | To make the keepalive request to ActBlue across its subdomains (the dashboard at `fundraising.app.actblue.com`, older tools on `secure.actblue.com`). actblue.com is the only site the extension can touch. |
 | `alarms` | To run the check on a schedule. |
 | `storage` | To remember your settings and last status, locally. |
 | `notifications` | To tell you once if your session has ended so you can sign back in. |

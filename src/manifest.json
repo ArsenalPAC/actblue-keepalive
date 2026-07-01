@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "ActBlue Session Keepalive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Keeps an active ActBlue dashboard session warm with a periodic credentialed request, so idle gaps don't force a re-login.",
   "permissions": ["alarms", "storage", "notifications"],
-  "host_permissions": ["https://secure.actblue.com/*"],
+  "host_permissions": ["https://*.actblue.com/*"],
   "background": {
     "service_worker": "background.js"
   },
