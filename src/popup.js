@@ -7,7 +7,7 @@ const DEFAULTS = {
   enabled: true,
   durationHours: 3,
   intervalMinutes: 5,
-  keepaliveUrl: "https://fundraising.app.actblue.com/",
+  keepaliveUrl: "https://fundraising.app.actblue.com/my-dashboards",
 };
 
 // Slider ticks. hours: null means Unlimited. Index is the slider position.
