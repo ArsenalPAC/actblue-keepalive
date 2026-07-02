@@ -21,7 +21,8 @@ Chrome (Manifest V3).
 ## What it does
 
 ActBlue signs you out after a period of inactivity. While it is on, this extension
-sends one small, signed-in request to `secure.actblue.com` every few minutes,
+sends one small, signed-in request to your ActBlue dashboard (default
+`fundraising.app.actblue.com`) every few minutes,
 which keeps your existing session from going idle, the same as if you had clicked
 something on the page.
 
@@ -79,7 +80,7 @@ what you can read in `src/`. To rebuild the package, run `sh scripts/package.sh`
   lets it idle out.
 - **Check now** runs an immediate check and extends the window.
 - **Advanced:** the ping interval (how often it checks while the window is open,
-  minimum 1 minute) and the keepalive URL (kept on `secure.actblue.com`).
+  minimum 1 minute) and the keepalive URL (kept on an `actblue.com` subdomain).
 
 ## Use at your own risk
 
@@ -94,7 +95,7 @@ its site at any time, which may stop this from working. See [SECURITY.md](SECURI
 
 | File | Role |
 |---|---|
-| `src/manifest.json` | MV3 manifest. Permissions: `alarms`, `storage`, `notifications`. Host: `secure.actblue.com` only. |
+| `src/manifest.json` | MV3 manifest. Permissions: `alarms`, `storage`, `notifications`. Host: `*.actblue.com` only. |
 | `src/background.js` | Service worker. While the keep-alive window is open, an alarm fires a credentialed `GET` and classifies the result as alive, ended, paused, or unreachable. |
 | `src/popup.html`, `popup.js` | The dropdown: status, on/off, duration slider, advanced settings, Check now. |
 | `src/about.html` | In-extension about page. |
@@ -103,8 +104,10 @@ See [docs/hld.md](docs/hld.md) for the architecture.
 
 ## Permissions, explained
 
-- `host_permissions: https://secure.actblue.com/*`: to make the keepalive request.
-  This is the only site the extension can touch.
+- `host_permissions: https://*.actblue.com/*`: to make the keepalive request. This
+  covers the ActBlue subdomains (the dashboard at `fundraising.app.actblue.com` and
+  older tools on `secure.actblue.com`); actblue.com is the only site the extension
+  can touch.
 - `alarms`: to run the check on a schedule.
 - `storage`: to remember your settings and last status, locally.
 - `notifications`: to tell you once if your session ended.

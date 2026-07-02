@@ -10,8 +10,8 @@ a minute before you install it.
 
 ### Trust the code you load
 
-A load-unpacked extension with access to `secure.actblue.com` can make signed-in
-requests to that site, because your browser attaches your existing session
+A load-unpacked extension with access to `*.actblue.com` can make signed-in
+requests to those sites, because your browser attaches your existing session
 automatically. This build only sends a read-only `GET` and never touches your
 cookie, and the source is open so you can confirm that. Still, the code you load
 is the code that runs, so get it from the official repository, and if you build

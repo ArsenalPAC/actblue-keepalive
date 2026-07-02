@@ -7,7 +7,7 @@ const DEFAULTS = {
   enabled: true,
   durationHours: 3,
   intervalMinutes: 5,
-  keepaliveUrl: "https://secure.actblue.com/my-dashboards",
+  keepaliveUrl: "https://fundraising.app.actblue.com/",
 };
 
 // Slider ticks. hours: null means Unlimited. Index is the slider position.
@@ -79,7 +79,8 @@ function normalizeUrl(raw) {
   const fallback = DEFAULTS.keepaliveUrl;
   try {
     const u = new URL((raw || "").trim());
-    if (u.hostname !== "secure.actblue.com" || u.protocol !== "https:") return fallback;
+    const onActBlue = u.hostname === "actblue.com" || u.hostname.endsWith(".actblue.com");
+    if (!onActBlue || u.protocol !== "https:") return fallback;
     return u.toString();
   } catch (_) {
     return fallback;

@@ -18,7 +18,7 @@ const DEFAULTS = {
   // Ping cadence in minutes (advanced). Must be short enough to beat the idle
   // timeout. MV3 alarms enforce a 1-minute floor in production.
   intervalMinutes: 5,
-  keepaliveUrl: "https://secure.actblue.com/my-dashboards",
+  keepaliveUrl: "https://fundraising.app.actblue.com/",
 };
 
 // ---- settings + runtime state (all local; nothing syncs) -------------------
