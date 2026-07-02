@@ -81,10 +81,12 @@ popup.html / popup.js  (read status; write settings to chrome.storage.local)
 - **Duration window, modest by default.** Rather than holding a session open
   forever, the keepalive runs for a chosen window (default 3 hours) and then lets
   the session idle out. Unlimited is opt-in.
-- **Default target the dashboard root.** `https://fundraising.app.actblue.com/`
-  needs no per-user parameter and cleanly redirects to login when the session is
-  gone, which doubles as the ended-session signal. The URL is configurable but
-  pinned to an `actblue.com` subdomain.
+- **Default target `my-dashboards`.** `https://fundraising.app.actblue.com/my-dashboards`
+  needs no per-user parameter, returns `200` while the session is alive, and cleanly
+  redirects to login when it is gone, which doubles as the ended-session signal. The
+  bare origin is avoided on purpose: it 302s to `/my-dashboards` unconditionally, and
+  under `redirect: "manual"` that redirect would read as an ended session every time.
+  The URL is configurable but pinned to an `actblue.com` subdomain.
 - **One-minute interval floor.** MV3 alarms enforce a 1-minute minimum in
   production; the default cadence is 5 minutes.
 - **Self-healing.** A dead session is reported, not retried into a loop; the next
